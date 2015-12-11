@@ -75,7 +75,6 @@ function websiteVisits() {
             unit: 'day',
             sig: sig,   
         }, function (result) {
-        		console.log(result);
         		$('#title').html("<p class='text-center'> <b> Dashboard For Yesterday - " + setTitle() + "</b> </p>");
         		var visitsData = result.data.values["Visited the website"];
             	yesterdayVisits = visitsData[yesterday];
@@ -106,8 +105,6 @@ function conversions() {
             unit: 'day',
             sig: sig,   
         }, function (result) {
-        	console.log(result);
-
 
         	// Marketing Leads
         	var downloadedDeck = result.data.values["Downloaded the product deck"];
@@ -139,10 +136,7 @@ function conversions() {
 
         	// Daily
 			var yesterdaySalesConversions = (( signUp[yesterday] + signIn[yesterday] + demoBag[yesterday] + freeBag[yesterday] ) / yesterdayVisits *100 ).toFixed(1);
-        	var sameDayLastWeekSalesConversions = (( signUp[sameDayLastWeek] + signIn[sameDayLastWeek] + demoBag[sameDayLastWeek] + freeBag[sameDayLastWeek]) / sameDayLastWeekVisits *100 ).toFixed(1);
-            console.log('sameDayLastWeekConversions ', sameDayLastWeekSalesConversions);
-            console.log('same day last week', sameDayLastWeek);
-            console.log('yesterday ', yesterday);
+        		var sameDayLastWeekSalesConversions = (( signUp[sameDayLastWeek] + signIn[sameDayLastWeek] + demoBag[sameDayLastWeek] + freeBag[sameDayLastWeek]) / sameDayLastWeekVisits *100 ).toFixed(1);
 
 			var difference = getDifference(yesterdaySalesConversions, sameDayLastWeekSalesConversions);
 			$('#dailySales').html(yesterdaySalesConversions +  "%   " + getArrow(difference) + difference + "%");
@@ -169,7 +163,6 @@ function salesConversions() {
         "query": query,
         "url": "" // add your google spreadsheets link here 
         }, { cache: true, expiry: 1000}, function(res) {
-            console.log(res);
             try {
                 var slotsByDate = JSON.parse(res).data;
             }
@@ -182,11 +175,9 @@ function salesConversions() {
                 var regex = /\d{4},\d{1,2},\d{1,2}/;
                 var sheetDate = new Date(regex.exec(slotsByDate[i]["Week"]));
                 sheetDate.setMonth(sheetDate.getMonth()+1);
-                console.log(sheetDate);
                 // Look for the week of the current date
                 if (date < sheetDate){
                     index = i - 1;
-                    console.log(index);
                     var slots = slotsByDate[i-1]["Main KPI slots booked"];
                     var previousWeeklySlots = slotsByDate[i-2]["Main KPI slots booked"];
                     demos();
@@ -220,15 +211,12 @@ function demos() {
     "query": query,
     "url": "" // add google spreadsheets link here 
         }, { cache: true, expiry: 1000}, function(res) {
-            console.log(index);
             var demosByDate = JSON.parse(res).data;
-            console.log(demosByDate);
             var weeklyDemos = demosByDate[index]["demos"];
             var previousWeeklyDemos = demosByDate[index-1]["demos"];
-            console.log('weeklyDemos', weeklyDemos);
+            
             if ( weeklyDemos == null )
                 weeklyDemos = 0;
-            console.log('previousWeeklyDemos', previousWeeklyDemos);
             var difference = (( weeklyDemos - previousWeeklyDemos ) / previousWeeklyDemos * 100).toFixed(1);
             $('#weeklyDemos').html(weeklyDemos +  "   " + getArrow(difference) + difference + "%");
             
